@@ -36,29 +36,29 @@ class GitHubCrawler:
                     if pr.merged and ("performance" in (pr.title if pr.title else '').lower() or "performance" in (
                     pr.body if pr.body else '').lower()):
                         keyword_found = True
-
-                    # 检查 code reviews 中是否包含关键字 "performance"
-                    reviews = []
-                    for review in pr.get_reviews():
-                        review_body = review.body if review.body else "No comment"
-                        if "performance" in review_body.lower():
-                            keyword_found = True
-                        reviews.append({
-                            'reviewer': review.user.login if review.user else "Unknown",
-                            'state': review.state,
-                            'body': review_body
-                        })
-
-                    # 检查 issue comments 中是否包含关键字 "performance"
-                    comments = []
-                    for comment in pr.get_issue_comments():
-                        comment_body = comment.body if comment.body else "No comment"
-                        if "performance" in comment_body.lower():
-                            keyword_found = True
-                        comments.append({
-                            'commenter': comment.user.login if comment.user else "Unknown",
-                            'body': comment_body
-                        })
+                    #
+                    # # 检查 code reviews 中是否包含关键字 "performance"
+                    # reviews = []
+                    # for review in pr.get_reviews():
+                    #     review_body = review.body if review.body else "No comment"
+                    #     if "performance" in review_body.lower():
+                    #         keyword_found = True
+                    #     reviews.append({
+                    #         'reviewer': review.user.login if review.user else "Unknown",
+                    #         'state': review.state,
+                    #         'body': review_body
+                    #     })
+                    #
+                    # # 检查 issue comments 中是否包含关键字 "performance"
+                    # comments = []
+                    # for comment in pr.get_issue_comments():
+                    #     comment_body = comment.body if comment.body else "No comment"
+                    #     if "performance" in comment_body.lower():
+                    #         keyword_found = True
+                    #     comments.append({
+                    #         'commenter': comment.user.login if comment.user else "Unknown",
+                    #         'body': comment_body
+                    #     })
 
                     # 如果在任何部分找到了关键字，则保存 PR 数据
                     if keyword_found:
@@ -76,22 +76,22 @@ class GitHubCrawler:
                                 'patch': patch
                             })
 
-                        # 获取 PR 的 diff
-                        diff_url = pr.diff_url
-                        response = requests.get(diff_url)
-                        if response.status_code == 200:
-                            diff = response.text
-                        else:
-                            diff = "Could not fetch diff"
+                        # # 获取 PR 的 diff
+                        # diff_url = pr.diff_url
+                        # response = requests.get(diff_url)
+                        # if response.status_code == 200:
+                        #     diff = response.text
+                        # else:
+                        #     diff = "Could not fetch diff"
 
                         pr_data = {
                             'repo': repo_name,
                             'pr_number': pr.number,
                             'body': body,
                             'changed_files': changed_files,
-                            'diff': diff,
-                            'reviews': reviews,  # 包含 code reviews
-                            'comments': comments  # 包含 issue comments
+                            # 'diff': diff,
+                            # 'reviews': reviews,  # 包含 code reviews
+                            # 'comments': comments  # 包含 issue comments
                         }
                         self.data.append(pr_data)
                         page += 1
@@ -123,4 +123,4 @@ if __name__ == "__main__":
     for thread in threads:
         thread.join()
 
-    crawler.save_to_file("merged_pull_requests_01.json")
+    crawler.save_to_file("merged_pull_requests_01_simplification.json")

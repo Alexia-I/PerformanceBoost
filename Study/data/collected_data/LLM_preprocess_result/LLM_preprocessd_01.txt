@@ -1,0 +1,181 @@
+keras-team/keras_18160pr_id: 18160 
+index_performance_boost_point: 1
+Optimization target: Prefetching data after batching, in order to have the next batch ready while processing the current batch.
+Optimization method: Using the `prefetch()` function provided by TensorFlow to prefetch the data.
+Optimization effect: Improved latency and throughput, at the cost of using additional memory to store prefetched elements.
+Generalizability: Yes, this optimization method can be used in other similar repositories for similar targets, as it is a common best practice in data performance optimization.
+
+pr_id: 18160 
+index_performance_boost_point: 2
+Optimization target: Prefetching batches instead of single elements.
+Optimization method: Using the `prefetch()` function to prefetch the batches.
+Optimization effect: Allows for next batches to be ready while processing the current batch in the training process.
+Generalizability: Yes, this optimization method can be used in other similar repositories for similar targets, as it is a best practice for improving training process efficiency.
+
+pr_id: 18160 
+index_performance_boost_point: 3
+Optimization target: Inserting prefetch after batching.
+Optimization method: Inserting the `prefetch()` function after the batch processing.
+Optimization effect: Helps improve performance especially if the output of the batch processing is another synchronous transform.
+Generalizability: Yes, this optimization method can be used in other similar repositories for similar targets, as it is a specific case where inserting prefetch in a certain order can improve performance.
+keras-team/keras_17980pr_id: 17980 
+index_performance_boost_point: 1 
+
+Optimization target: Identifying and handling missing or invalid input values in the measure_performance function.
+Specific target: Checking if input data, optimizer, loss function, and num_gpus are provided.
+General target: Handling missing or invalid input values to prevent errors and ensure the function's proper execution.
+
+Optimization method: Using if-elif-else statements to check each input value and raise appropriate ValueErrors if necessary.
+Specific method: Checking if input values are None or not provided, and raising ValueErrors accordingly.
+General method: Implementing input validation checks and raising exceptions for invalid inputs.
+
+Optimization effect: By checking for missing or invalid input values, the measure_performance function can handle such cases properly and raise informative ValueErrors, preventing potential runtime errors or unexpected behavior.
+Specific effect: Making sure that input data, optimizer, loss function, and num_gpus are provided, and raising ValueErrors with appropriate error messages if any of them are missing or invalid.
+General effect: Improving the robustness and reliability of the measure_performance function by handling problematic input values.
+
+Generalizibility: Yes, this optimization method of input validation and raising ValueErrors can be used in other similar repositories for similar targets.
+Example for generalization: In other codebases or projects that have functions with input parameters, adding input validation checks and raising informative exceptions can help ensure the proper usage and prevent potential errors.
+
+keras-team/keras_17357pr_id: 17357
+    index_performance_boost_point: 1
+    Optimization target: Fix the slowdown and make sure the function is checking that sample_weights correspond to inputs and outputs instead of checking every single sample in the tensor.
+    Optimization method: Typecheck the sample_weights and wrap it in a list if it is a tensor.
+    Optimization effect: This optimization improves the performance by efficiently handling the sample_weights and reducing the unnecessary checks on individual samples in the tensor.
+    Generalizability: Yes, this optimization method can be used in other similar repositories to handle sample_weights efficiently.
+
+pr_id: 17357 
+    index_performance_boost_point: 2
+    Optimization target: Improve the partial sample check in the function.
+    Optimization method: Modify the partial sample check code to handle weights directly and also give non-finite weights the same treatment as None.
+    Optimization effect: This optimization improves the performance by directly processing the weights using NumPy and treating non-finite weights as None, reducing the unnecessary checks and computations.
+    Generalizability: Yes, this optimization method using NumPy can be applied to handle weights in other similar repositories.
+
+Note: Only two performance boost points were identified in the given pull request.
+
+keras-team/keras_17512pr_id: 17512
+
+index_performance_boost_point: 
+
+1. Optimization target: Reshaping the weights in group normalization layer
+   - Specific target: Changing the shape of the broadcast_shape variable
+   - General target: Improving the efficiency of weight reshaping in group normalization layer
+
+2. Optimization method: Using len() function instead of shape.rank attribute
+   - Specific method: Changing the line of code from `broadcast_shape = [1] * input_shape.shape.rank` to `broadcast_shape = [1] * len(input_shape)`
+   - General method: Dynamically determine the length of the input shape instead of using a predefined attribute
+
+3. Optimization effect: Improve the performance of weight reshaping in group normalization layer
+   - Specific effect: Reduce the computational overhead of calculating the shape rank
+   - General effect: Speed up the weight reshaping process in group normalization layer
+
+4. Generalizibility: Yes, this optimization method of using len() instead of a predefined attribute can be used in other similar repositories for similar targets.
+   - Example for generalization: If another deep learning library has a similar normalization layer, the same optimization method can be applied to improve the performance of weight reshaping.
+keras-team/keras_17587pr_id: 17587 
+index_performance_boost_point: 
+
+Optimization target: Restrictive logic for fallback path selection in cases where it is not really needed, significant performance degradations, <specific tgt in this pr>, <the fallback path selection logic in this pr>, <general tgt>
+
+Optimization method: Remove the restriction in choosing the fallback path when it is not really needed, <specific method in this pr>, <remove the unnecessary restriction>, <general method>
+
+Optimization effect: Resolving the problem of unnecessary fallback path selection, <specific effect in this pr>, <resolving performance degradations>, <general effect>
+
+Generalizibility(Could this optimization method be used in other similar repo for similar target): Yes, this optimization method of removing unnecessary restrictions can be used in other similar situations where performance degradations occur due to unnecessary fallback path selection.
+keras-team/keras_17591pr_id: 17591 
+index_performance_boost_point 1:
+Optimization target: Choose the correct path for GRU and LSTM implementation on ROCm when padded i/o is needed, <GRU and LSTM implementation on ROCm when padded i/o is needed>, <GRU and LSTM implementation>
+Optimization method: Modify the condition for choosing the fallback path, <modify the condition for choosing the fallback path>, <condition modification>
+Optimization effect: Prevent unnecessary selection of the fallback path, leading to potential performance degradation, <prevent unnecessary selection of the fallback path>, <prevent performance degradation>
+Generalizibility: No, as it is specific to the ROCm implementation of GRU and LSTM and their fallback path selection.
+
+pr_id: 17591 
+index_performance_boost_point 2:
+Optimization target: Improve the condition check for CUDNN supported inputs, <condition check for CUDNN supported inputs>, <condition check improvement>
+Optimization method: Modify the condition check to consider sequence_lengths, <modify the condition check>, <condition modification>
+Optimization effect: Properly include sequence_lengths as a consideration for CUDNN support, <include sequence_lengths as a consideration>, <proper condition consideration>
+Generalizibility: Yes, this optimization method can be used in other similar repositories where CUDNN support with sequence_lengths is needed.
+keras-team/keras_17140pr_id: 17140 
+index_performance_boost_point: 1
+Optimization target: Disabling the rescale
+Optimization method: Remove the rescale operation
+Optimization effect: Significant speed improvement (from 11 seconds to 7 seconds)
+Generalizibility: Yes, this optimization method can be used in other similar repos for similar targets.
+
+pr_id: 17140 
+index_performance_boost_point: 2
+Optimization target: Always equal to 1
+Optimization method: Skip rescaling because the output has already been rescaled with a softmax
+Optimization effect: No change in loss
+Generalizibility: Yes, this optimization method can be used in other similar repos for similar targets.
+
+pr_id: 17140 
+index_performance_boost_point: 3
+Optimization target: Enable/disable forced_rescale parameter
+Optimization method: Enable/disable the rescale operation based on the forced_rescale parameter
+Optimization effect: No change in loss, but provides flexibility in rescaling behavior
+Generalizibility: Yes, this optimization method can be used in other similar repos for similar targets.
+keras-team/keras_8044pr_id: 8044 
+
+index_performance_boost_point: 
+
+Optimization target: Replace the usage of `predict` method in `decode_sequence` with the `inference_model.predict` method for faster prediction when batch size > 1.
+Optimization method: Modify the code to use the `inference_model` instead of calling `predict` method separately in `decode_sequence`.
+Optimization effect: The updated code allows for faster prediction when the batch size is greater than 1.
+Generalizability: Yes, this optimization method can be used in other similar repositories and projects to improve prediction speed when batch size is greater than 1.
+
+Optimization target: Symbolic loop for sampling from the decoder.
+Optimization method: Add a symbolic loop for sampling from the decoder, using K.rnn and layer.call.
+Optimization effect: The symbolic loop improves the simplicity and efficiency of the sampling process in the decoder.
+Generalizability: Possibly, but this optimization method might not be as straightforward for regular use cases and may depend on the specific requirements of the project or task.
+
+Optimization target: Leveraging Lambda layers for start token generation and sampling.
+Optimization method: Use Lambda layers to generate start tokens and perform sampling.
+Optimization effect: This optimization simplifies the start token generation and sampling process in the model.
+Generalizability: Possibly, but the usefulness of this optimization may depend on the specific requirements of the project or task.
+
+Optimization target: Replacing certain code snippets and paths.
+Optimization method: Modify code snippets and file paths to match the specific environment and dataset.
+Optimization effect: This optimization ensures that the code is compatible with the specific environment and dataset used.
+Generalizability: No, this optimization is specific to the changes made in this pull request and may not be directly applicable to other similar repositories or projects.
+keras-team/keras_17142pr_id: 17142
+
+index_performance_boost_point 0:
+Optimization target: update_freq parameter
+Optimization method: Disabling unnecessary logging checks
+Optimization effect: Improved performance by removing unnecessary code
+Generalizability: Yes, this optimization method can be used in other similar repos for similar targets as it simplifies the code and removes unnecessary checks.
+
+index_performance_boost_point 1:
+Optimization target: Batch-level summary writing using update_freq
+Optimization method: Updated the update_freq parameter to support batch-level logging
+Optimization effect: Allows logging losses and metrics to TensorBoard every batch or every N batches
+Generalizability: Yes, this optimization method can be used in other similar repos for similar targets as it provides flexibility in logging frequency.
+
+index_performance_boost_point 2:
+Optimization target: Batch-level summaries in a subclassed Model
+Optimization method: Provided examples for logging batch-level summaries in subclassed and Functional API models
+Optimization effect: Enables users to log custom batch-level summaries in their models
+Generalizability: Yes, this optimization method can be used in other similar repos for similar targets as it demonstrates how to log batch-level summaries in different model types.
+
+index_performance_boost_point 3:
+Optimization target: Handling logs that are not dictionaries
+Optimization method: Disable update_freq if logs are not a dictionary
+Optimization effect: Prevents errors when logs are not in dictionary format
+Generalizability: Yes, this optimization method can be used in other similar repos for similar targets as it handles non-dictionary logs gracefully.
+
+index_performance_boost_point 4:
+Optimization target: TensorBoard batch metrics in test cases
+Optimization method: Updated test cases to check for batch-level metrics
+Optimization effect: Ensures correct logging of batch-level metrics in test cases
+Generalizability: Yes, this optimization method can be used in other similar test cases for similar targets to verify proper logging of batch-level metrics.
+
+index_performance_boost_point 5:
+Optimization target: Handling strategies with no immediate logging
+Optimization method: Adjusted the expected events when using asynchronous strategies
+Optimization effect: Prevents expected events when using asynchronous strategies
+Generalizability: Yes, this optimization method can be used in other repos that use asynchronous strategies to adjust expected events accordingly.
+keras-team/keras_17170pr_id: 17170 
+index_performance_boost_point: 
+Optimization target: Replacing .format with f-string for enhanced readability and performance, replacing `format` method with f-strings in string interpolation, general optimization for improving code readability and performance.
+Optimization method: Replacing .format with f-string, using f-strings for string interpolation, a general optimization method for improving code readability and performance.
+Optimization effect: Improved code readability and performance by using f-strings for string interpolation.
+Generalizibility(Could this optimization method be used in other similar repo for similar target): Yes, this optimization method of replacing .format with f-string can be used in any Python codebase to improve code readability and performance.

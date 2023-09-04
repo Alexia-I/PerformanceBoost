@@ -32,7 +32,7 @@ def categorize_issue(pr):
 
     response = openai.ChatCompletion.create(
         # model="gpt-3.5-turbo-16k",
-        model="gpt-4",
+        model="gpt-4-32k",
         messages=messages,
         max_tokens=1000
     )
@@ -50,7 +50,7 @@ def checkpoint(checkpoint_file):
 
 if __name__ == "__main__":
     # Define the file where data are stored
-    file_path = "./merged_pull_requests.json"
+    file_path = "../data/collected_data/github_crawled_prs/merged_pull_requests_numpy_without_comments.json"
 
     # read the file
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     checkpoint(checkpoint_file)
 
     # Define the record file
-    rcdfile_path = "../data/collected_data/LLM_preprocess_result/LLM_preprocessd_01_gpt-4-32k.txt"
+    rcdfile_path = "../data/collected_data/LLM_preprocess_result/LLM_preprocessd_numpy_01_gpt4_without_comments.txt"
 
     counter = 0
     start_time = time.time()
@@ -84,8 +84,8 @@ if __name__ == "__main__":
 
         # time sleep to ensure the limit is not interrputed
         counter += 1
-        if counter % 3 == 0:
+        if counter % 2 == 0:
             elapsed_time = time.time() - start_time
-            if elapsed_time < 60:
-                time.sleep(60 - elapsed_time)
+            if elapsed_time < 10:
+                time.sleep(30 - elapsed_time)
             start_time = time.time()

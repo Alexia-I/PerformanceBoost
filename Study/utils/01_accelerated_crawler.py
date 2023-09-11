@@ -9,6 +9,7 @@ import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
+import os
 
 
 class GitHubCrawler:
@@ -95,8 +96,9 @@ class GitHubCrawler:
                     }
                     self.data.append(pr_data)
 
-                    if len(self.data) >= 5:
-                        self.save_to_file("merged_pull_requests_fast.json")
+                    if len(self.data) >= 1:
+                        self.save_to_file(f"merged_pull_requests_{repos[0].replace('/','_')}.json")
+
 
 
         except RateLimitExceededException:
@@ -118,6 +120,7 @@ class GitHubCrawler:
             with open(filename, 'r') as f:
                 existing_data = json.load(f)
         except FileNotFoundError:
+            open(filename, 'w').close()
             pass  # 如果文件不存在，existing_data 将保持为空列表
 
         existing_data.extend(self.data)  # 添加新数据
@@ -131,14 +134,15 @@ class GitHubCrawler:
 if __name__ == "__main__":
     token_pool = ['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', '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',
                   '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']
-    repos = ['numpy/numpy']
+    # Repos needed to crawl, one at a time
+    repos = ['pandas-dev/pandas']
     crawler = GitHubCrawler(token_pool)
 
     # Load already fetched PR numbers
-    crawler.load_fetched_pr_numbers("merged_pull_requests_fast.json")
+    crawler.load_fetched_pr_numbers(f"merged_pull_requests_{repos[0].replace('/','_')}.json")
 
     with ThreadPoolExecutor(max_workers=3) as executor:
         results = list(executor.map(crawler.fetch_pull_requests, repos))
 
     # 最后扫个尾，如果还剩1-4之间的数据的话，就保存下来
-    crawler.save_to_file("merged_pull_requests_fast.json")
+    crawler.save_to_file(f"merged_pull_requests_{repos[0].replace('/','_')}.json")
